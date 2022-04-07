@@ -175,10 +175,10 @@ calculate("5 fact") == 120
 // -------------------------------------------
 // These are extra credit tests; commented out
 // uncomment them to turn them on for evaluation
-
+//
 // Implement calculate([String]) and calculate(String)
 // to handle negative numbers
-/*
+///*
 calculate(["2", "+", "-2"]) == 0
 calculate(["2", "-", "-2"]) == 4
 calculate(["2", "*", "-2"]) == -4
@@ -193,13 +193,75 @@ calculate("2 - -2") == 4
 calculate("-2 / 2") == -1
 
 calculate("1 -2 3 -4 5 count") == 5
-*/
- 
+//*/
+//
 // Implement calculate([String]) and calculate(String)
 // to use floating-point values
-/*
+///*
 func calculate(_ args: [String]) -> Double {
-    return -1.0
+    if args.count == 1 {
+        // One argument = just "avg", "fact", or "count", all of which evaulate to 0
+        return 0
+    } else if args.count == 2 {
+        // Average, factorial, or count of 1 number
+        switch args[1] {
+        case "avg":
+            // The average of 1 number is itself
+            return Double(args[0])!
+        case "fact":
+            // Do factorial stuff
+            var total = 1
+            for num in 1...Int(args[0])! {
+                total *= num
+            }
+            return Double(total)
+        case "count":
+            // With only 1 other argument, the count is always 1
+            return 1
+        default:
+            return -1
+        }
+    } else if args.count == 3 {
+        // "Normal" (ie: 2 + 2) type cases, average of 2 numbers, or count of 2 numbers
+        switch args[2] {
+        case "avg":
+            return (Double(args[0])! + Double(args[1])!) / 2
+        case "count":
+            return 2
+        default:
+            switch args[1]{
+            case "+":
+                return Double(args[0])! + Double(args[2])!
+            case "-":
+                return Double(args[0])! - Double(args[2])!
+            case "*":
+                return Double(args[0])! * Double(args[2])!
+            case "/":
+                return Double(args[0])! / Double(args[2])!
+            case "%":
+                return Double(args[0])!.truncatingRemainder(dividingBy: Double(args[2])!)
+            default:
+                return -1
+            }
+        }
+    } else {
+        // Count and average cases
+        switch args[args.count-1] {
+        case "avg":
+            // Average everything
+            var sum = 0;
+            for num in args {
+                if num != "avg"{
+                    sum += Int(num)!
+                }
+            }
+            return Double(sum / (args.count - 1))
+        case "count":
+            return Double(args.count - 1)
+        default:
+            return -1
+        }
+    }
 }
 func calculate(_ arg: String) -> Double {
     return -1.0
@@ -212,4 +274,4 @@ calculate(["2.5", "*", "2.5"]) == 6.25
 calculate(["2.0", "/", "2.0"]) == 1.0
 calculate(["2.0", "%", "2.0"]) == 0.0
 calculate("1.0 2.0 3.0 4.0 5.0 count") == 5
-*/
+
